@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Unshorten URL</title>
+</head>
+<body>
+  <h1>Unshorten URL</h1>
+  <form id="unshortenForm">
+    <label for="shortUrl">Enter Shortened URL:</label><br>
+    <input type="url" id="shortUrl" name="shortUrl" required><br><br>
+    <button type="submit">Unshorten</button>
+  </form>
+  <p id="result"></p>
+  <script>
+    const form = document.getElementById("unshortenForm");
+    const resultElement = document.getElementById("result");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // Prevent form submission
+      const shortUrl = document.getElementById("shortUrl").value;
+
+      // Create a new HTMLAnchorElement (link)
+      const link = document.createElement("a");
+      link.href = shortUrl;
+
+      // Attempt to follow the shortened link and get the final URL
+      link.addEventListener("load", () => {
+        const longUrl = link.href;
+        resultElement.textContent = `Original URL: ${longUrl}`;
+      });
+
+      try {
+        link.click(); // Trigger the link's "click" event
+      } catch (error) {
+        resultElement.textContent = "Error unshortening URL.";
+      }
+    });
+  </script>
+</body>
+</html>
