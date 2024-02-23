@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Expander</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>URL Expander</h1>
+  <label for="shortUrl">Short URL:</label>
+  <input type="text" id="shortUrl" placeholder="Enter short URL">
+  <button onclick="expandUrl()">Expand</button>
+
+  <div id="expandedUrlContainer" style="display:none;">
+    <h3>Expanded Link:</h3>
+    <p id="expandedUrl"></p>
+  </div>
+
+  <script>
+    function expandUrl() {
+      var shortUrl = document.getElementById("shortUrl").value;
+      var expandedUrlContainer = document.getElementById("expandedUrlContainer");
+      var expandedUrlElement = document.getElementById("expandedUrl");
+
+      // Use http://unshorten.me for URL expansion
+      fetch('http://unshorten.me/s/' + encodeURIComponent(shortUrl))
+        .then(response => response.text())
+        .then(data => {
+          var expandedUrl = data.trim() || "Failed to expand URL";
+
+          // Display the expanded URL
+          expandedUrlElement.textContent = expandedUrl;
+          expandedUrlContainer.style.display = "block";
+        })
+        .catch(error => {
+          console.error("Error expanding URL:", error.message);
+
+          // Display an error message
+          expandedUrlElement.textContent = "Failed to expand URL";
+          expandedUrlContainer.style.display = "block";
+        });
+    }
+  </script>
+</body>
+</html>
