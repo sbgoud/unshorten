@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Expander</title>
+</head>
+<body>
+    <h1>URL Expander</h1>
+
+    <form id="url-form">
+        <input type="text" id="short-url" placeholder="Enter short URL">
+        <button type="submit">Expand</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script src="script.js">
+const urlForm = document.getElementById('url-form');
+const shortUrlInput = document.getElementById('short-url');
+const resultDiv = document.getElementById('result');
+
+urlForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    const shortUrl = shortUrlInput.value;
+
+    fetch(`https://api.rebrandly.com/v1/links/expand?destination=${encodeURIComponent(shortUrl)}`, {
+        headers: {
+            'apikey': 'YOUR_API_KEY'  // Replace with your actual Rebrandly API key
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.destination) {
+            resultDiv.textContent = 'Original Long URL: ' + data.destination;
+        } else {
+            resultDiv.textContent = 'Error: Could not expand URL';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        resultDiv.textContent = 'Error: Could not expand URL';
+    });
+});
+
+      
+    </script>
+</body>
+</html>
