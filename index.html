@@ -14,8 +14,8 @@
   // Android detection 
   if (/android/i.test(userAgent)) {
     // Intent protocol for Android apps
-    let intentUri = amazonUrl.replace('https://www.amazon.com', 'intent://www.amazon.com');
-    intentUri += '#Intent;scheme=https;package=com.amazon.mShop.android.shopping;end';
+    let intentUri = amazonUrl.replace('https://www.amazon.in', 'intent://www.amazon.in');
+    intentUri += '#Intent;scheme=https;package=in.amazon.mShop.android.shopping;end';
 
     window.location.href = intentUri;
 
