@@ -1,39 +1,31 @@
-
 <!DOCTYPE html>
 <html>
-<body onload="openAmazonLink('https://www.amazon.in');">
-
-
-//https://amzn.to/3uzpnBi
-
+<head>
+<title>Open Amazon Product in App</title>
 <script>
-
-	function openAmazonLink(amazonUrl) {
+function openAmazonIndiaLink(amazonInUrl) {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-  // Android detection 
   if (/android/i.test(userAgent)) {
-    // Intent protocol for Android apps
-    let intentUri = amazonUrl.replace('https://www.amazon.in', 'intent://www.amazon.in');
-    intentUri += '#Intent;scheme=https;package=in.amazon.mShop.android.shopping;end';
-
-    window.location.href = intentUri;
-
-    // Fallback to browser (after a delay to give the intent time to launch)
+    // Try to open with the Amazon India app
+    window.location.href = amazonInUrl.replace('https://www.amazon.in', 'amzn://asin');
+    
+    // Fallback to browser (after a short delay)
     setTimeout(() => {
-      window.location.href = amazonUrl;
-    }, 1000);
+      window.location.href = amazonInUrl;
+    }, 1000); 
   } else {
     // Regular browser opening for other devices
-    window.location.href = amazonUrl;
+    window.location.href = amazonInUrl;
   }
 }
-
 </script>
+</head>
+<body>
+
+<button onclick="openAmazonIndiaLink('https://www.amazon.in/dp/B012345678?tag=yourtrackingid')">
+  Open in Amazon App
+</button>
 
 </body>
 </html>
-
-
-
-
