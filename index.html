@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Expander</title>
+    <style>
+        /* Some basic styling - adjust as needed */
+        body { font-family: sans-serif; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>URL Expander</h1>
+
+    <label for="input_url">Shortened URL:</label>
+    <input type="text" id="input_url">
+
+    <button id="button_unshorten">Expand</button>
+
+    <div id="results"> 
+        <div data-todo="empty" style="display: none;">No URLs expanded yet.</div>
+        <div data-todo="todo" style="display: none;">
+            <h2>Expanded URL:</h2>
+            <span data-todo="title"></span>
+            <p>Hops: <span data-todo="hops"></span></p> 
+            <p>Time Taken: <span data-todo="elapsed"></span></p> 
+            <button data-todo="remove">Remove</button> 
+        </div> 
+    </div>
+
+    <script>
+        const addTodoButton = document.querySelector('[id="button_unshorten"]') const url_to_unshorten = document.querySelector('[id="input_url"]') const empty = document.querySelector('[data-todo="empty"]') const todo = document.querySelector('[data-todo="todo"]') const todosParent = todo.parentNode let currentTodo = 0 const addTodo = async () => { try { currentTodo++ const data = await fetch( `https://onesimpleapi.com/api/unshorten?token=vgINRjQBZszn38ULNAkiV8VEci5ynlEMXsBEMdF2&url=`+url_to_unshorten.value+`&output=json` ) const json = await data.json(); console.log(json); const todos = [...document.querySelectorAll('[data-todo="todo"]')] const newTodo = currentTodo === 1 ? todos[0] : todos[0].cloneNode(true) const title = newTodo.querySelector('[data-todo="title"]') const id = newTodo.querySelector('[data-todo="id"]') const elapsed = newTodo.querySelector('[data-todo="elapsed"]') const hops = newTodo.querySelector('[data-todo="hops"]') title.innerHTML = `<h3><a href="${json.data}">${json.data}</a></h3>` id.innerText = `${json.hops} Hops` elapsed.innerText = `Elapsed time: ${json.elapsed} seconds` hops.innerHTML = ""; if (json.hops > 0){ for (const trace of json.trace) { hops.innerHTML += `<li><a href="${trace}">${trace}</a></li>`; } hops.innerHTML = `<ol>` + hops.innerHTML + `</ol>`; } if (currentTodo > 1) { todosParent.appendChild(newTodo) } newTodo.style.display = 'flex' const removeButton = newTodo.querySelector('[data-todo="remove"]') removeButton.addEventListener('click', () => { const todos = [...document.querySelectorAll('[data-todo="todo"]')] if (todos.length === 1) { currentTodo = 0 newTodo.style.display = 'none' } else { newTodo.parentNode.removeChild(newTodo) } }) } catch (err) { console.error(`Error getting todo: ${err}`) } } addTodoButton.addEventListener('click', addTodo)
+    </script>
+</body>
+</html>
